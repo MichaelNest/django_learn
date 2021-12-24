@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 
 class Women(models.Model):
     title = models.CharField(max_length=222)
@@ -10,6 +11,9 @@ class Women(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'post_id': self.id})
 
 # python manage.py makemigrations
 
