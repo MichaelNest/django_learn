@@ -34,7 +34,7 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 
-		{% getcats as categories %}
+<!--		{% getcats filter=3 %}-->
 
 	<ul id="leftchapters">
 		{% if cat_selected == 0 %}
@@ -42,13 +42,8 @@
 		{% else %}
 			<li class="selected"><a href="{% url 'home' %}">Все категории</a></li>
 		{% endif %}
-		{% for c in categories %}
-			{% if c.pk == cat_selected %}
-				<li class="selected">{{ c.name }}</li>
-			{% else %}
-				<li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
-			{% endif %}
-		{% endfor %}
+
+		{% show_categories 'name' cat_selected %}
 
 		<li class="share">
 		<p>Наш канал</p>
