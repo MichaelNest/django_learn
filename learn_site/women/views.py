@@ -10,14 +10,31 @@ menu = [{'title': 'О сайте', 'url_name': 'about'},
 
 def index(request):
     posts = Women.objects.all()
-    cats = Category.objects.all()
+    # cats = Category.objects.all()
     context = {'posts': posts,
                'menu': menu,
-               'cats': cats,
+               # 'cats': cats,
                'title': 'Master Page',
                'cat_selected': 0}
     # return HttpResponse('Page of Women App')
     return render(request, 'women/index.html', context=context)
+
+def show_category(request, cat_id):
+    posts = Women.objects.filter(cat_id=cat_id)
+    # cats = Category.objects.all()
+    context = {'posts': posts,
+               'menu': menu,
+               # 'cats': cats,
+               'title': 'Отображение по категориям',
+               'cat_selected': cat_id}
+
+    if len(posts) == 0:
+        raise Http404
+
+    return render(request, 'women/index.html', context=context)
+
+
+    # return HttpResponse(f'<h2>Identeficator number is {cat_id}</h2>')
 
 def about(request):
     context = {'menu': menu, 'title': 'About Site'}
@@ -43,22 +60,7 @@ def show_post(request, post_id):
     # return render(request, 'women/show_post.html', context=context)
     return HttpResponse(f'<h2>Identeficator number is {post_id}</h2>')
 
-def show_category(request, cat_id):
-    posts = Women.objects.filter(cat_id=cat_id)
-    cats = Category.objects.all()
-    context = {'posts': posts,
-               'menu': menu,
-               'cats': cats,
-               'title': 'Отображение по категориям',
-               'cat_selected': cat_id}
 
-    if len(posts) == 0:
-        raise Http404
-
-    return render(request, 'women/index.html', context=context)
-
-
-    # return HttpResponse(f'<h2>Identeficator number is {cat_id}</h2>')
 
 def cat(request, cat_id):
     if request.GET:
