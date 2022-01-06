@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from women.models import Women, Category
 
 
@@ -19,7 +19,9 @@ def index(request):
     # return HttpResponse('Page of Women App')
     return render(request, 'women/index.html', context=context)
 
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    cat = Category.objects.filter(slug=cat_slug)
+    cat_id = cat[0].id
     posts = Women.objects.filter(cat_id=cat_id)
     # cats = Category.objects.all()
     context = {'posts': posts,
@@ -35,6 +37,20 @@ def show_category(request, cat_id):
 
 
     # return HttpResponse(f'<h2>Identeficator number is {cat_id}</h2>')
+
+def show_post(request, post_slug):
+    # context = {'menu': menu, 'post_id': post_id}
+    # return render(request, 'women/show_post.html', context=context)
+    # return HttpResponse(f'<h2>Identeficator number is {post_id}</h2>')
+    post = get_object_or_404(Women, slug=post_slug)
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'women/post.html', context=context)
 
 def about(request):
     context = {'menu': menu, 'title': 'About Site'}
@@ -54,12 +70,6 @@ def contact(request):
     # context = {'menu': menu,}
     # return render(request, 'women/contact.html', context=context)
     return HttpResponse('<h2>Our Contacts</h2>')
-
-def show_post(request, post_id):
-    # context = {'menu': menu, 'post_id': post_id}
-    # return render(request, 'women/show_post.html', context=context)
-    return HttpResponse(f'<h2>Identeficator number is {post_id}</h2>')
-
 
 
 def cat(request, cat_id):
